@@ -987,11 +987,14 @@ typedef struct
 
 - (void)hideRearViews
 {
-    self.rightView.hidden = YES;
-    self.leftView.hidden = YES;
-    [self removeViewController:self.leftViewController];
-    [self removeViewController:self.rightViewController];
-    [self.frontView setUserInteractionForContainedViewEnabled:YES];
+    CALayer *layer = (CALayer *)[self.frontView.layer presentationLayer];
+    if (layer.position.x == CGRectGetMidX(self.view.bounds)) {
+        self.rightView.hidden = YES;
+        self.leftView.hidden = YES;
+        [self removeViewController:self.leftViewController];
+        [self removeViewController:self.rightViewController];
+        [self.frontView setUserInteractionForContainedViewEnabled:YES];
+    }
 }
 
 - (void)showRightView
@@ -1014,13 +1017,13 @@ typedef struct
 
 - (BOOL)isLeftViewVisible
 {
-    CALayer *layer = (CALayer *)[self.frontView.layer presentationLayer];
+    CALayer *layer = (CALayer *)self.frontView.layer;
     return (layer.position.x > CGRectGetMidX(self.view.bounds));
 }
 
 - (BOOL)isRightViewVisible
 {
-    CALayer *layer = (CALayer *)[self.frontView.layer presentationLayer];
+    CALayer *layer = (CALayer *)self.frontView.layer;
     return (layer.position.x < CGRectGetMidX(self.view.bounds));
 }
 
